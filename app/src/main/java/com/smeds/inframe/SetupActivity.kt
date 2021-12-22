@@ -15,6 +15,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
+import kotlinx.android.synthetic.main.activity_main.*
 
 
 class SetupActivity : AppCompatActivity() {
@@ -137,7 +138,7 @@ class SetupActivity : AppCompatActivity() {
                 selected = -1
                 // Setup the snackbar
                 val snackbar = Snackbar.make(
-                    rootLayout,
+                    findViewById(R.id.floatingActionButton),
                     getText(R.string.setupError),
                     Snackbar.LENGTH_LONG
                 )
@@ -146,6 +147,7 @@ class SetupActivity : AppCompatActivity() {
                     // Hide the snack bar
                     snackbar.dismiss()
                 }
+                snackbar.anchorView = floatingActionButton
                 snackbar.show()
             }
 

@@ -67,9 +67,12 @@
         android:layout_marginBottom="16dp"
         android:clickable="true"
         android:src="@drawable/ic_arrow_forward_white_24dp"
+        app:tint="@android:color/white"
         app:backgroundTint="@color/colorPrimaryDark"
+        app:fabSize="auto"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        tools:ignore="SpeakableTextPresentCheck" />
 
     <TextView
         android:id="@+id/descriptionTextView"

@@ -10,17 +10,20 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.InFrame">
         <activity
+            android:name=".LeaderHomeActivity"
+            android:exported="false"
+            android:label="@string/title_activity_leader_home"
+            android:theme="@style/Theme.InFrame.NoActionBar" />
+        <activity
             android:name=".OnboarderPresentationActivity"
             android:exported="false" />
         <activity
             android:name=".SetupActivity"
             android:exported="false" />
         <activity
-            android:name=".LeaderHomeActivity"
-            android:exported="false" />
-        <activity
             android:name=".FrameHomeActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:label="Home" />
         <activity
             android:name=".MainActivity"
             android:exported="true">
