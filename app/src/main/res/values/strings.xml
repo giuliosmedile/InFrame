@@ -1,13 +1,16 @@
 <resources>
     <string name="app_name">InFrame</string>
+    <!-- Onboarding -->
     <string name="onboardingTitle1">Welcome to InFrame</string>
-    <string name="onboardingSub1"></string>
+    <string name="onboardingSub1"> </string>
     <string name="onboardingTitle2">Transform your old devices</string>
     <string name="onboardingSub2">Into stunning art pieces</string>
     <string name="onboardingTitle3">Control your setup easily</string>
     <string name="onboardingSub3">Leader devices can control accurately the flow of action and setup any scene</string>
     <string name="onboardingTitle4">Show whatever comes to your mind</string>
     <string name="onboardingSub4">Frame devices can be arranged in a variety of ways to best display the content</string>
+
+    <!-- Setup -->
     <string name="beginSetup">Begin Setup</string>
     <string name="setupTitle">What do you want this device to be?</string>
     <string name="setupSub">Tap an illustration to select</string>
@@ -20,6 +23,8 @@
     <string name="ok">OK</string>
     <string name="cancel">Cancel</string>
     <string name="confirmationSetup">Are you sure you want this device to be a %s?</string>
+
+    <!-- Leader Home -->
     <string name="title_activity_leader_main">LeaderMainActivity</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
@@ -28,8 +33,10 @@
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_settings">Settings</string>
 
+    <!-- Frame home -->
     <string name="menu_home">Home</string>
     <string name="menu_gallery">Gallery</string>
     <string name="menu_slideshow">Slideshow</string>
     <string name="title_activity_frame_main">FrameMainActivity</string>
+    <string name="subText_frame_home">Tap to put in waiting state</string>
 </resources>
