@@ -1,0 +1,35 @@
+<resources>
+    <string name="app_name">InFrame</string>
+    <string name="onboardingTitle1">Welcome to InFrame</string>
+    <string name="onboardingSub1"></string>
+    <string name="onboardingTitle2">Transform your old devices</string>
+    <string name="onboardingSub2">Into stunning art pieces</string>
+    <string name="onboardingTitle3">Control your setup easily</string>
+    <string name="onboardingSub3">Leader devices can control accurately the flow of action and setup any scene</string>
+    <string name="onboardingTitle4">Show whatever comes to your mind</string>
+    <string name="onboardingSub4">Frame devices can be arranged in a variety of ways to best display the content</string>
+    <string name="beginSetup">Begin Setup</string>
+    <string name="setupTitle">What do you want this device to be?</string>
+    <string name="setupSub">Tap an illustration to select</string>
+    <string name="stringContinue">Continue</string>
+    <string name="leader">Leader</string>
+    <string name="frame">Frame</string>
+    <string name="leaderDescription">A Leader does not display content, but is tasked with deciding which content is displayed on Frame devices, and their physical orientation.</string>
+    <string name="frameDescription">A Frame device is tasked with displaying content.\nMust be oriented with the indications given by the Leader.</string>
+    <string name="setupError">Please choose which device do you want this to be by clicking one image.</string>
+    <string name="ok">OK</string>
+    <string name="cancel">Cancel</string>
+    <string name="confirmationSetup">Are you sure you want this device to be a %s?</string>
+    <string name="title_activity_leader_main">LeaderMainActivity</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">Android Studio</string>
+    <string name="nav_header_subtitle">android.studio@android.com</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="action_settings">Settings</string>
+
+    <string name="menu_home">Home</string>
+    <string name="menu_gallery">Gallery</string>
+    <string name="menu_slideshow">Slideshow</string>
+    <string name="title_activity_frame_main">FrameMainActivity</string>
+</resources>
