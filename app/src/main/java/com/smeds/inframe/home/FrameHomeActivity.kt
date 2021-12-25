@@ -1,10 +1,14 @@
-package com.smeds.inframe
+package com.smeds.inframe.home
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.MotionEvent
 import android.widget.ImageView
 import android.widget.Toast
+import com.smeds.inframe.R
+import com.smeds.inframe.setup.OnboarderPresentationActivity
+import com.smeds.inframe.setup.QRDisplayerActivity
 
 class FrameHomeActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -16,7 +20,8 @@ class FrameHomeActivity : AppCompatActivity() {
         imageView.setOnTouchListener { _, motionEvent ->
             when (motionEvent.action) {
                 MotionEvent.ACTION_UP -> {
-                    Toast.makeText(this, "Image tapped", Toast.LENGTH_SHORT).show()
+                    val intent = Intent(this, QRDisplayerActivity::class.java)
+                    startActivity(intent)
                 }
 
             }

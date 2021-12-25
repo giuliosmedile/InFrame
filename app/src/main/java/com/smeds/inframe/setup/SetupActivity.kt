@@ -1,4 +1,4 @@
-package com.smeds.inframe
+package com.smeds.inframe.setup
 
 import android.content.DialogInterface
 import android.content.Intent
@@ -8,13 +8,15 @@ import android.os.Bundle
 import android.util.Log
 import android.view.MotionEvent
 import android.view.View
-import android.view.Window
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
+import com.smeds.inframe.R
+import com.smeds.inframe.home.FrameHomeActivity
+import com.smeds.inframe.home.LeaderHomeActivity
 import kotlinx.android.synthetic.main.activity_main.*
 
 
@@ -34,7 +36,7 @@ class SetupActivity : AppCompatActivity() {
         }
         setContentView(R.layout.activity_setup)
 
-        // TODO: Login activity prima di setup activity (o fragment?)
+        // TODO: Login activity (o fragment?) prima di setup activity
 
         rootLayout = window.decorView.rootView;
 
@@ -116,14 +118,16 @@ class SetupActivity : AppCompatActivity() {
                 // Use the Builder class for convenient dialog construction
                 val builder = AlertDialog.Builder(this)
                 builder.setMessage(getString(R.string.confirmationSetup, result))
-                    .setPositiveButton(R.string.ok,
+                    .setPositiveButton(
+                        R.string.ok,
                         DialogInterface.OnClickListener { dialog, id ->
                             // Scegli la activity da chiamare, in base alla risposta dell'utente
                             val whichClass = if (selected==0) LeaderHomeActivity::class.java else FrameHomeActivity::class.java
                             val intent : Intent = Intent(this, whichClass)
                             startActivity(intent)
                         })
-                    .setNegativeButton(R.string.cancel,
+                    .setNegativeButton(
+                        R.string.cancel,
                         DialogInterface.OnClickListener { dialog, id ->
                             // User cancelled the dialog so I do nothing lmao
                         })

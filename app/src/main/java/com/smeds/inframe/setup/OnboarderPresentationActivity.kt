@@ -1,9 +1,10 @@
-package com.smeds.inframe
+package com.smeds.inframe.setup
 
 import android.content.Intent
 import android.os.Bundle
 import com.chyrta.onboarder.OnboarderActivity
 import com.chyrta.onboarder.OnboarderPage
+import com.smeds.inframe.R
 
 class OnboarderPresentationActivity : OnboarderActivity() {
 

@@ -23,6 +23,7 @@
     <string name="ok">OK</string>
     <string name="cancel">Cancel</string>
     <string name="confirmationSetup">Are you sure you want this device to be a %s?</string>
+    <string name="qr_title">Frame this QR code with the Leader device</string>
 
     <!-- Leader Home -->
     <string name="title_activity_leader_main">LeaderMainActivity</string>
