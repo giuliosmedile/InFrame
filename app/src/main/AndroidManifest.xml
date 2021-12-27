@@ -10,6 +10,12 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.InFrame">
         <activity
+            android:name=".DebugActivity"
+            android:exported="false" />
+        <activity
+            android:name=".setup.LoginActivity"
+            android:exported="false" />
+        <activity
             android:name=".home.LeaderHomeActivity"
             android:exported="false"
             android:label="@string/title_activity_leader_home"
@@ -23,7 +29,7 @@
         <activity
             android:name=".setup.QRDisplayerActivity"
             android:exported="false"
-            android:theme="@style/Theme.InFrame.NoActionBar"/>
+            android:theme="@style/Theme.InFrame.NoActionBar" />
         <activity
             android:name=".home.FrameHomeActivity"
             android:exported="false"
