@@ -55,8 +55,8 @@ class QRDisplayerActivity : AppCompatActivity() {
         matrixValues[4] = matrixValues[0]
         matrix.setValues(matrixValues)
         // E questo serve per centrare il QR
-        matrix.preTranslate(image.width / -2f, image.height / -2f)
-        matrix.preTranslate(d.screenWidthPx / 2f, d.screenHeightPx / 2f)
+        matrix.postTranslate((canvas.width) / 2f, (canvas.height) / 2f)
+        matrix.postTranslate(-image.width / 2f * matrixValues[0], -image.height / 2f * matrixValues[0])
 
         Log.i("MATRIX", "$matrix")
         Log.i("MATRIX", "${d.toString()}")
@@ -66,6 +66,8 @@ class QRDisplayerActivity : AppCompatActivity() {
         canvas.withMatrix(matrix) {
             canvas.drawBitmap(image, 0f, 0f, null)
         }
+
+        Log.i("MATRIX", "${canvas.width} - ${canvas.height}")
 
 
     }
