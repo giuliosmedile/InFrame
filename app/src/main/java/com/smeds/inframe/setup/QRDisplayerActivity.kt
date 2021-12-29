@@ -7,10 +7,19 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.graphics.withMatrix
+import androidx.core.view.marginBottom
+import androidx.core.view.marginTop
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.WriterException
 import com.journeyapps.barcodescanner.BarcodeEncoder
 import com.smeds.inframe.R
+import com.smeds.inframe.data.DeviceInfo
+import com.smeds.inframe.data.MatrixTransform
+import kotlinx.android.synthetic.main.activity_qr.*
+import com.google.zxing.EncodeHintType
+import java.util.*
+
 
 class QRDisplayerActivity : AppCompatActivity() {
 
@@ -24,9 +33,41 @@ class QRDisplayerActivity : AppCompatActivity() {
         var deviceName : String = Build.MANUFACTURER + "-" + Build.MODEL + "-" + "smeds"
 
         val imageView = findViewById<ImageView>(R.id.qrImageView)
-        val bitmap = generateQR(deviceName, 256)
-
+        val d = DeviceInfo(windowManager)
+        val image = generateQR(deviceName, 512)
+        val bitmap = Bitmap.createBitmap(d.screenWidthDp, d.screenHeightDp, Bitmap.Config.ARGB_8888)
+        val canvas = Canvas(bitmap)
         imageView.setImageBitmap(bitmap)
+
+        val matrix = MatrixTransform.calcMatrixForImage(
+            d,
+            image!!,
+            0f,
+            0f,
+            2f,
+            2f
+        )
+
+        // Questo blocco serve perchè altrimenti l'immagine non è perfettamente quadrata...
+        // Anche se la funzione calcMatrixForImage funziona alla perfezione ^_^
+        val matrixValues = FloatArray(9)
+        matrix.getValues(matrixValues)
+        matrixValues[4] = matrixValues[0]
+        matrix.setValues(matrixValues)
+        // E questo serve per centrare il QR
+        matrix.preTranslate(image.width / -2f, image.height / -2f)
+        matrix.preTranslate(d.screenWidthPx / 2f, d.screenHeightPx / 2f)
+
+        Log.i("MATRIX", "$matrix")
+        Log.i("MATRIX", "${d.toString()}")
+
+        // Tutto lo schermo bianco, poi l'immagine del QR
+        canvas.drawARGB(255, 255, 255, 255)
+        canvas.withMatrix(matrix) {
+            canvas.drawBitmap(image, 0f, 0f, null)
+        }
+
+
     }
 
 
@@ -37,17 +78,24 @@ class QRDisplayerActivity : AppCompatActivity() {
       */
     fun generateQR(content: String?, size: Int): Bitmap? {
         var bitmap: Bitmap? = null
+        val hints = EnumMap<EncodeHintType, Any>(EncodeHintType::class.java)
+        //hints.put(EncodeHintType.CHARACTER_SET, encoding);
+        //hints.put(EncodeHintType.CHARACTER_SET, encoding);
+        hints[EncodeHintType.MARGIN] = 0 /* default = 4 */
         try {
             val barcodeEncoder = BarcodeEncoder()
             bitmap = barcodeEncoder.encodeBitmap(
                 content,
-                BarcodeFormat.QR_CODE, size, size
+                BarcodeFormat.QR_CODE, size, size, hints
             )
         } catch (e: WriterException) {
             e.message?.let { Log.e("generateQR()", it) }
         }
+
         return bitmap
     }
+
+
 
 
 }
