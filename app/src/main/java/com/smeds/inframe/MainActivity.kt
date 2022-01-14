@@ -9,8 +9,7 @@ import com.smeds.inframe.setup.OnboarderPresentationActivity
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-
+        //setContentView(R.layout.activity_main)
         // TODO: Una volta fatto login, bisogna reindirizzare l'utente all'activity giusta
         val intent = Intent(this, DebugActivity::class.java)
         startActivity(intent)

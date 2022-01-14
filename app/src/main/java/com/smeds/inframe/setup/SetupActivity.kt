@@ -38,7 +38,7 @@ class SetupActivity : AppCompatActivity() {
 
         // TODO: Login activity (o fragment?) prima di setup activity
 
-        rootLayout = window.decorView.rootView;
+        rootLayout = window.decorView.rootView
 
         // Find the views
         phoneView = findViewById(R.id.imagePhoneView)
@@ -146,11 +146,6 @@ class SetupActivity : AppCompatActivity() {
                     getText(R.string.setupError),
                     Snackbar.LENGTH_LONG
                 )
-                // Set an action for snack bar
-                snackbar.setAction("Hide Me") {
-                    // Hide the snack bar
-                    snackbar.dismiss()
-                }
                 snackbar.anchorView = floatingActionButton
                 snackbar.show()
             }
