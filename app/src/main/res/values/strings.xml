@@ -41,4 +41,12 @@
     <string name="title_activity_frame_main">FrameMainActivity</string>
     <string name="subText_frame_home">Tap to put in waiting state</string>
     <string name="title_activity_leader_home">LeaderHomeActivity</string>
+
+    <!-- Login -->
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="username">Username</string>
+    <string name="usernameError">Please provide a username.</string>
+    <string name="passwordError">Please provide a password.</string>
+    <string name="loading">Loading...</string>
 </resources>

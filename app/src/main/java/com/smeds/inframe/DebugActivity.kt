@@ -63,7 +63,7 @@ class DebugActivityRecyclerViewAdapter internal constructor(context: Context?, d
 
     // inflates the row layout from xml when needed
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val view: View = mInflater.inflate(R.layout.debug_rvrow, parent, false)
+        val view: View = mInflater.inflate(R.layout.rvrow_debug, parent, false)
         return ViewHolder(view)
     }
 
