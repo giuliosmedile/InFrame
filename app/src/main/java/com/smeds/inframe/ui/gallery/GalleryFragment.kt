@@ -65,8 +65,8 @@ class GalleryFragment : Fragment() {
         val u1 = User("username", "email")
         val u2 = User("another", "posta")
         val windowManager = (activity as LeaderHomeActivity).windowManager
-        val d1 = Device(u1, windowManager)
-        val d2 = Device(u2, windowManager)
+        val d1 = Device(u1, windowManager, requireContext())
+        val d2 = Device(u2, windowManager, requireContext())
 
         deviceList.add(d1); deviceList.add(d2)
     }

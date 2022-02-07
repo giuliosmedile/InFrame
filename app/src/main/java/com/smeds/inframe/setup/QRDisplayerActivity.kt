@@ -4,6 +4,7 @@ import android.content.res.Configuration
 import android.graphics.*
 import android.os.Build
 import android.os.Bundle
+import android.provider.Settings
 import android.util.Log
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
@@ -30,7 +31,11 @@ class QRDisplayerActivity : AppCompatActivity() {
         // This will be the name of the device, will be the same in the DB eventually
         // TODO sostituire smeds con il nome dell'utente da login
         // TODO parametrizzare il tutto in una struttura di setting
-        var deviceName : String = Build.MANUFACTURER + "-" + Build.MODEL + "-" + "smeds"
+        val android_id = Settings.Secure.getString(
+            contentResolver,
+            Settings.Secure.ANDROID_ID
+        )
+        var deviceName : String = Build.MANUFACTURER + "-" + Build.MODEL + "-" + android_id
 
         val imageView = findViewById<ImageView>(R.id.qrImageView)
         val d = DeviceInfo(windowManager)

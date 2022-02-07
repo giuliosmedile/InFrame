@@ -7,12 +7,10 @@ import androidx.annotation.RequiresApi
 import com.amplifyframework.AmplifyException
 import com.amplifyframework.auth.cognito.AWSCognitoAuthPlugin
 import com.amplifyframework.core.Amplify
+import com.amplifyframework.storage.s3.AWSS3StoragePlugin
 import kotlinx.coroutines.*
 import org.json.JSONObject
-import java.io.BufferedReader
-import java.io.InputStreamReader
-import java.io.OutputStreamWriter
-import java.io.PrintWriter
+import java.io.*
 import java.lang.Exception
 import java.net.HttpURLConnection
 import java.net.Socket
@@ -28,6 +26,7 @@ object Backend {
         // Initializes all the needed plugins
         try {
             Amplify.addPlugin(AWSCognitoAuthPlugin())
+            Amplify.addPlugin(AWSS3StoragePlugin())
             Amplify.configure(applicationContext)
             Log.i(TAG, "Initialized Amplify")
 
@@ -41,7 +40,7 @@ object Backend {
     }
 
     @RequiresApi(Build.VERSION_CODES.N)
-    fun sendJson(jsonObject: JSONObject) {
+    fun sendJson(jsonObject: JSONObject) : String {
         // Create JSON using JSONObject
 //        val jsonObject = JSONObject()
 //        jsonObject.put("name", "Valerio")
@@ -52,7 +51,7 @@ object Backend {
         val jsonObjectString = jsonObject.toString()
 
 
-        GlobalScope.launch() {
+        //GlobalScope.launch() {
 
             val urlString = "18.222.222.141:8080"
             val url = URL("http://$urlString")
@@ -82,7 +81,7 @@ object Backend {
                 outputStreamWriter.flush()
             } catch (e: Exception) {
                 Log.e(TAG, "Exception: ${e.message}")
-                return@launch
+                return ""
             }
 
             // Check if the connection is successful
@@ -96,6 +95,28 @@ object Backend {
             } else {
                 Log.i("HTTPURLCONNECTION_ERROR", responseCode.toString())
             }
-        }
+
+            return br
+        //}
+    }
+
+    fun uploadFile(uploadFile: File, filename : String) {
+        Log.i(TAG, "About to upload ${uploadFile.absolutePath}")
+        // Upload a file on the online storage.
+        Amplify.Storage.uploadFile(filename, uploadFile,
+            {Log.i(TAG, "Succesfully uploaded")},
+            {error -> Log.e(TAG, "Upload failed: $filename; ${error.toString()}")})
+    }
+
+    fun downloadFile(): File {
+        // Download a file from the online storage
+        val filename = "ciambella"
+        var file = File.createTempFile(filename,".png")
+
+        Amplify.Storage.downloadFile("ciambella.png", file,
+            {Log.i(TAG, "Succesfully uploaded")},
+            {Log.e(TAG, "Upload failed")})
+
+        return file
     }
 }

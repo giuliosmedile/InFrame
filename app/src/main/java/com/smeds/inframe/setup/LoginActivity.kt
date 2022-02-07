@@ -156,16 +156,19 @@ class LoginActivity : AppCompatActivity() {
 
         // Invia JSON del device al server
         val user : User = User(Amplify.Auth.currentUser.username, "")
-        val device : Device = Device(user, windowManager)
+        val device : Device = Device(user, windowManager, this)
         val json = device.toJSONObject()
+        json.put("requestID", "login")
         Log.i(TAG, json.toString())
         try {
-            Backend.sendJson(json)
+            val result : String = Backend.sendJson(json)
+            Log.i(TAG, "Result JSON: ${result}")
         } catch (e : Exception) {
             Log.e(TAG, "Exception occurred: ${e.message}")
         }
 
         // TODO: Ricevi JSON dal server per creare User
+
 
 
     }

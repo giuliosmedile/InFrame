@@ -1,7 +1,9 @@
 package com.smeds.inframe.ui.home
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
@@ -10,6 +12,8 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.smeds.inframe.R
 import com.smeds.inframe.databinding.FragmentHomeBinding
+import com.smeds.inframe.home.CapturePhotoActivity
+import com.smeds.inframe.setup.QRDisplayerActivity
 
 class HomeFragment : Fragment() {
 
@@ -35,6 +39,16 @@ class HomeFragment : Fragment() {
         homeViewModel.text.observe(viewLifecycleOwner, Observer {
             textView.text = it
         })
+
+        textView.setOnTouchListener {  _, motionEvent ->
+            when (motionEvent.action) {
+                MotionEvent.ACTION_UP -> {
+                    val intent = Intent(activity?.applicationContext, CapturePhotoActivity()::class.java)
+                    startActivity(intent)
+                }
+
+            }
+            true }
         return root
     }
 

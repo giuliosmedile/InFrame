@@ -24,5 +24,12 @@
         ]
       }
     }
+  },
+  "storage": {
+    "s37b4fc550": {
+      "service": "S3",
+      "providerPlugin": "awscloudformation",
+      "dependsOn": []
+    }
   }
 }
