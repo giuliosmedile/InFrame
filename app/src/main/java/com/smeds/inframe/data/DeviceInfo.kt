@@ -10,7 +10,7 @@ import org.json.JSONObject
 import kotlin.math.sqrt
 
 
-class DeviceInfo (private val windowManager: WindowManager) {
+class DeviceInfo () {
 
     var screenInches : Double = 0.0             // Dimension of screen in inches
     var screenWidthPx : Int = 0                 // Dimension of screen width in pixels
@@ -21,7 +21,7 @@ class DeviceInfo (private val windowManager: WindowManager) {
     var screenHeightInch : Double = 0.0
     var density : Int = 0
 
-    init {
+    constructor(windowManager: WindowManager) : this() {
         val display = windowManager.defaultDisplay
         val displayMetrics = DisplayMetrics()
         display.getMetrics(displayMetrics)
@@ -85,6 +85,17 @@ class DeviceInfo (private val windowManager: WindowManager) {
         Log.v("INFO", "Width: ${screenWidthDp}dp, Height: ${screenHeightDp}dp")
     }
 
+    constructor(screenInches : Double, screenWidthPx : Int, screenHeightPx : Int, screenWidthDp : Int, screenHeightDp : Int, screenWidthInch : Double, screenHeightInch : Double, density : Int) : this() {
+        this.screenInches = screenInches
+        this.screenWidthPx = screenWidthPx
+        this.screenHeightPx = screenHeightPx
+        this.screenWidthDp = screenWidthDp
+        this.screenHeightDp = screenHeightDp
+        this.screenWidthInch = screenWidthInch
+        this.screenHeightInch = screenHeightInch
+        this.density = density
+    }
+
     override fun toString(): String {
         return "[Inches] w: ${"%.2f".format(screenWidthInch)}, h: ${"%.2f".format(screenHeightInch)}, d: ${"%.2f".format(screenInches)} \n" +
                 "[Pixels] w: ${screenWidthPx}, h: ${screenHeightPx}\n" +
@@ -99,6 +110,7 @@ class DeviceInfo (private val windowManager: WindowManager) {
             .put("screenWidthDp", screenWidthPx)
             .put("screenHeightDp", screenHeightDp)
             .put("screenWidthInch", screenWidthInch)
+            .put("screenHeightInch", screenHeightInch)
             .put("density", density)
     }
 

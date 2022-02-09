@@ -2,9 +2,11 @@ package com.smeds.inframe.setup
 
 import android.content.DialogInterface
 import android.content.Intent
+import android.content.SharedPreferences
 import android.graphics.ColorMatrix
 import android.graphics.ColorMatrixColorFilter
 import android.os.Bundle
+import android.preference.PreferenceManager
 import android.util.Log
 import android.view.MotionEvent
 import android.view.View
@@ -28,6 +30,7 @@ class SetupActivity : AppCompatActivity() {
     private var selected : Int = -1                     // Will need this to decide where to go from the setup screen. 0 for leader, 1 for frame
     private lateinit var rootLayout : View
     private lateinit var descriptionTextView : TextView
+    private lateinit var prefs : SharedPreferences
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -73,6 +76,9 @@ class SetupActivity : AppCompatActivity() {
             Log.d("INFO", "FAB Setting Clicked")
             fabClicked()
         }
+
+        // Import global preferences
+        prefs = PreferenceManager.getDefaultSharedPreferences(this)
 
     }
 
@@ -121,6 +127,11 @@ class SetupActivity : AppCompatActivity() {
                     .setPositiveButton(
                         R.string.ok,
                         DialogInterface.OnClickListener { dialog, id ->
+                            // Aggiorna le impostazioni globali
+                            val editor = prefs.edit()
+                            editor.putInt("role", selected) // role will be 0 for leader, 1 for frame
+                            editor.commit()
+
                             // Scegli la activity da chiamare, in base alla risposta dell'utente
                             val whichClass = if (selected==0) LeaderHomeActivity::class.java else FrameHomeActivity::class.java
                             val intent : Intent = Intent(this, whichClass)

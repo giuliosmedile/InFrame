@@ -2,16 +2,21 @@ package com.smeds.inframe.home
 
 import android.Manifest
 import android.app.AlertDialog
-import com.smeds.inframe.R
 import android.content.Context
+import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.graphics.Matrix
+import android.graphics.RectF
 import android.graphics.drawable.Drawable
 import android.media.ExifInterface
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.Environment
+import android.preference.PreferenceManager
 import android.provider.MediaStore
 import android.text.Spannable
 import android.text.SpannableString
@@ -21,31 +26,24 @@ import android.view.View
 import android.view.Window
 import android.widget.Button
 import android.widget.ImageView
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
+import androidx.lifecycle.lifecycleScope
+import com.smeds.inframe.R
+import com.smeds.inframe.setup.Backend
 import com.smeds.inframe.setup.DraggableImage
 import kotlinx.android.synthetic.main.activity_capture_photo.*
+import kotlinx.coroutines.*
+import kotlinx.coroutines.Dispatchers.IO
 import org.json.JSONObject
 import java.io.File
+import java.io.FileOutputStream
 import java.io.InputStream
 import java.text.SimpleDateFormat
 import java.util.*
-import android.content.DialogInterface
-import android.database.Cursor
-import android.graphics.*
-import android.util.DisplayMetrics
-import android.widget.Toast
-import androidx.annotation.RequiresApi
-import com.google.gson.Gson
-import com.smeds.inframe.setup.Backend
-import java.io.FileOutputStream
-import java.io.OutputStream
-import java.lang.Exception
-import java.lang.RuntimeException
-import android.graphics.Bitmap
-import androidx.annotation.NonNull
 
 
 class CapturePhotoActivity : AppCompatActivity() {
@@ -122,6 +120,7 @@ class CapturePhotoActivity : AppCompatActivity() {
      *  - the two images at full scale
      */
     @RequiresApi(Build.VERSION_CODES.N)
+
     fun confirm(view : View) {
 
         // Dump the matrices into the arrays
@@ -154,17 +153,26 @@ class CapturePhotoActivity : AppCompatActivity() {
             .put("translateY", aMatrix[5])
             .put("fileForeground", fileForeground.name)
             .put("fileBackground", fileBackground.name)
-            // TODO: Mettere lo username che fa la richiesta
+            .put("fileBackgroundWidth", imgView.drawable.intrinsicWidth)
+            .put("fileBackgroundHeight", imgView.drawable.intrinsicHeight)
+            .put("fileForegroundWidth", zoomClass.drawable.intrinsicWidth)
+            .put("fileForegroundHeight", zoomClass.drawable.intrinsicHeight)
+            .put("user", PreferenceManager.getDefaultSharedPreferences(this).getString("username", ""))
 
-        Log.i("TEST", "JSON: ${json.toString(1)}")
+        //Log.i("TEST", "JSON: ${json.toString(1)}")
+        runBlocking {
+            val tasks = listOf(
+                // Invia le due immagini al server
+                launch { Backend.uploadFile(fileForeground, fileForeground.name) },
+                launch { Backend.uploadFile(fileBackground, fileBackground.name) }
+            )
+            tasks.joinAll()
+        }
 
-        // Invia le due immagini al server
-        Backend.uploadFile(fileForeground, fileForeground.name)
-        Backend.uploadFile(fileBackground, fileBackground.name)
 
         // Invia json al server
-        //Backend.sendJson(json)
-        Log.i(TAG, json.toString(1))
+        Backend.sendJson(json)
+        Log.i(TAG, "Dopo aver inviato al server: ${json.toString(1)}")
     }
 
     fun clear(view : View) {

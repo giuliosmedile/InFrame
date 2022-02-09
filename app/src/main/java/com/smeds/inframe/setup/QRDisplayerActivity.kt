@@ -1,5 +1,6 @@
 package com.smeds.inframe.setup
 
+import android.content.Intent
 import android.content.res.Configuration
 import android.graphics.*
 import android.os.Build
@@ -7,10 +8,12 @@ import android.os.Bundle
 import android.provider.Settings
 import android.util.Log
 import android.widget.ImageView
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.graphics.withMatrix
 import androidx.core.view.marginBottom
 import androidx.core.view.marginTop
+import androidx.lifecycle.lifecycleScope
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.WriterException
 import com.journeyapps.barcodescanner.BarcodeEncoder
@@ -19,15 +22,38 @@ import com.smeds.inframe.data.DeviceInfo
 import com.smeds.inframe.data.MatrixTransform
 import kotlinx.android.synthetic.main.activity_qr.*
 import com.google.zxing.EncodeHintType
+import com.smeds.inframe.home.FrameHomeActivity
+import kotlinx.coroutines.Dispatchers.IO
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import org.json.JSONObject
 import java.util.*
 
 
 class QRDisplayerActivity : AppCompatActivity() {
 
+    lateinit var deviceName : String
+    var job : Job? = null
+
+    @RequiresApi(Build.VERSION_CODES.N)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_qr)
 
+        setQR()
+
+
+        job = lifecycleScope.launch (IO) {
+            var json = makeCall()
+
+        }
+
+
+    }
+
+    private fun setQR() {
         // This will be the name of the device, will be the same in the DB eventually
         // TODO sostituire smeds con il nome dell'utente da login
         // TODO parametrizzare il tutto in una struttura di setting
@@ -35,7 +61,7 @@ class QRDisplayerActivity : AppCompatActivity() {
             contentResolver,
             Settings.Secure.ANDROID_ID
         )
-        var deviceName : String = Build.MANUFACTURER + "-" + Build.MODEL + "-" + android_id
+        deviceName = Build.MANUFACTURER + "-" + Build.MODEL + "-" + android_id
 
         val imageView = findViewById<ImageView>(R.id.qrImageView)
         val d = DeviceInfo(windowManager)
@@ -49,8 +75,8 @@ class QRDisplayerActivity : AppCompatActivity() {
             image!!,
             0f,
             0f,
-            2f,
-            2f
+            0.787402f,
+            0.787402f
         )
 
         // Questo blocco serve perchè altrimenti l'immagine non è perfettamente quadrata...
@@ -73,10 +99,7 @@ class QRDisplayerActivity : AppCompatActivity() {
         }
 
         Log.i("MATRIX", "${canvas.width} - ${canvas.height}")
-
-
     }
-
 
     /**
      * Function to generate a QR
@@ -103,7 +126,27 @@ class QRDisplayerActivity : AppCompatActivity() {
     }
 
 
+    @RequiresApi(Build.VERSION_CODES.N)
+    suspend fun makeCall() : JSONObject? {
 
+        val jsonRequest = JSONObject()
+            .put("deviceName", deviceName)
+            .put("requestID", "output")
+
+        while (true) {
+            delay(3000L)
+            val response = Backend.sendJson(jsonRequest)
+            Log.i("TEST", response)
+            if (response == "none") continue
+            else return JSONObject(response)
+        }
+    }
+
+    override fun onPause() {
+        job?.cancel()
+        job = null
+        super.onPause()
+    }
 
 }
 

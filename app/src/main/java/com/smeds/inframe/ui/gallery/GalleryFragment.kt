@@ -1,14 +1,19 @@
 package com.smeds.inframe.ui.gallery
 
+import android.content.Context.MODE_PRIVATE
 import android.os.Bundle
+import android.preference.PreferenceManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.gson.Gson
 import com.smeds.inframe.R
 import com.smeds.inframe.databinding.FragmentGalleryBinding
 import com.smeds.inframe.home.LeaderHomeActivity
@@ -24,7 +29,7 @@ class GalleryFragment : Fragment() {
     // This property is only valid between onCreateView and
     // onDestroyView.
     private val binding get() = _binding!!
-    private val deviceList = ArrayList<Device>()
+    private var deviceList = ArrayList<Device>()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -39,19 +44,19 @@ class GalleryFragment : Fragment() {
         val root: View = binding.root
         val recyclerView = binding.deviceRecyclerView //view?.findViewById<RecyclerView>(R.id.deviceRecyclerView)
 
-        createListData(container)
-        val adapter = DeviceAdapter(requireContext(), deviceList)
-        recyclerView?.adapter = adapter
+        galleryViewModel.recyclerView.observe(viewLifecycleOwner, {
 
-//        val textView: TextView = binding.textGallery
-//        galleryViewModel.text.observe(viewLifecycleOwner, Observer {
-//            textView.text = it
-//        })
+            val prefs = PreferenceManager.getDefaultSharedPreferences(context)
+            val j = prefs?.getString("user", "")
+            val u = Gson().fromJson(j, User::class.java)
+            deviceList = u.devices
 
-        val recyclerView2 = binding.deviceRecyclerView
-        galleryViewModel.recyclerView.observe(viewLifecycleOwner, Observer {
-            recyclerView2.adapter = adapter
+            val adapter = DeviceAdapter(requireContext(), deviceList)
+            recyclerView.layoutManager = LinearLayoutManager(requireContext())
+            recyclerView?.adapter = adapter
         })
+
+        // binding.textGallery.text = deviceList.joinToString()
 
         return root
     }

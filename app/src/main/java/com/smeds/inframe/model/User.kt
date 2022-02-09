@@ -5,11 +5,14 @@ class User(username: String, email: String) {
         private set
     var email : String = email
         private set
-    var devices : MutableList<Device>
-        private set
+    var devices : ArrayList<Device>
 
     init {
-        devices = mutableListOf()
+        devices = ArrayList()
+    }
+
+    override fun toString(): String {
+        return "username: $username, email: $email, devices: ${devices.joinToString()}"
     }
 
 }

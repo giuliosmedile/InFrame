@@ -11,21 +11,55 @@ import android.provider.Settings.Secure
 
 
 
-class Device (user : User, windowManager: WindowManager, context : Context){
+class Device() {
 
-    private val android_id = Secure.getString(
-        context.contentResolver,
-        Secure.ANDROID_ID
-    )
-    var name : String = Build.MANUFACTURER + "-" + Build.MODEL + "-" + android_id
-    var user : User = user
-    var deviceInfo : DeviceInfo = DeviceInfo(windowManager)
+    lateinit var context: Context
+    lateinit var windowManager : WindowManager
+    lateinit var user : User
+    lateinit var name : String
+    lateinit var deviceInfo: DeviceInfo
+    lateinit var android_id : String
+
+
+    constructor(user : User, windowManager: WindowManager, context : Context) : this() {
+        this.user = user
+        this.windowManager = windowManager
+        this.context = context
+
+        android_id = Secure.getString(
+            context.contentResolver,
+            Secure.ANDROID_ID
+        )
+        name = Build.MANUFACTURER + "-" + Build.MODEL + "-" + android_id
+        deviceInfo = DeviceInfo(windowManager)
+    }
+
+    constructor(json : JSONObject) : this() {
+        // Fill the deviceinfo
+        var screenInches : Double = json.getDouble("screenInches")
+        var screenWidthPx : Int = json.getInt("screenWidthPx")
+        var screenHeightPx : Int = json.getInt("screenHeightPx")
+        var screenWidthDp : Int = json.getInt("screenWidthDp")
+        var screenHeightDp : Int = json.getInt("screenHeightDp")
+        var screenWidthInch : Double = json.getDouble("screenWidthInch")
+        var screenHeightInch : Double = json.getDouble("screenHeightInch")
+        var density : Int = json.getInt("density")
+        name = json.getString("deviceName")
+        user = User(json.getString("user"), "")
+        deviceInfo = DeviceInfo(screenInches, screenWidthPx, screenHeightPx, screenWidthDp, screenHeightDp, screenWidthInch, screenHeightInch, density)
+
+    }
+
 
     fun toJSONObject() : JSONObject {
         val json = deviceInfo.toJsonObject()
         json.put("deviceName", name)
         json.put("user", user.username)
         return json
+    }
+
+    override fun toString(): String {
+        return "{name: $name, user: $user, deviceInfo: ${deviceInfo}}"
     }
 
 

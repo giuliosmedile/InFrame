@@ -21,13 +21,23 @@ import android.widget.LinearLayout
 
 import android.widget.ProgressBar
 import android.app.AlertDialog
+import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Build
+import android.preference.PreferenceManager
 import android.view.*
 import androidx.annotation.RequiresApi
+import com.amazonaws.mobileconnectors.cognitoauth.Auth
 import com.amplifyframework.auth.options.AuthSignOutOptions
 import com.smeds.inframe.model.Device
 import com.smeds.inframe.model.User
+import org.json.JSONArray
+import org.json.JSONObject
 import java.lang.Exception
+import com.google.gson.Gson
+
+
+
 
 
 class LoginActivity : AppCompatActivity() {
@@ -36,6 +46,7 @@ class LoginActivity : AppCompatActivity() {
     lateinit var dialog : AlertDialog
     lateinit var username : String
     lateinit var password : String
+    lateinit var prefs : SharedPreferences
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,14 +55,18 @@ class LoginActivity : AppCompatActivity() {
         Backend.initialize(this)
 
         // If I'm here, I want to sign out
-        val options = AuthSignOutOptions.builder()
-            .globalSignOut(true)
-            .build()
-        Amplify.Auth.signOut(options,
-            { Log.i(TAG, "Signed out globally") },
-            { Log.e(TAG, "Sign out failed", it) }
-        )
+        if (Amplify.Auth.currentUser != null) {
+            val options = AuthSignOutOptions.builder()
+                .globalSignOut(true)
+                .build()
+            Amplify.Auth.signOut(options,
+                { Log.i(TAG, "Signed out globally") },
+                { Log.e(TAG, "Sign out failed", it) }
+            )
+        }
 
+        // Start up preferences
+        prefs = PreferenceManager.getDefaultSharedPreferences(this)
     }
 
 
@@ -144,30 +159,54 @@ class LoginActivity : AppCompatActivity() {
 
     @RequiresApi(Build.VERSION_CODES.N)
     private fun handleSigninSuccess(r : AuthSignInResult, errorTextView: TextView) {
-        Log.i(TAG, "inside handlesigninsuccess")
+        Log.i(TAG, "inside handlesigninsuccess. Result: ${r.toString()}")
         runOnUiThread {
-            errorTextView.text = r.toString()
             dialog.dismiss()
         }
 
         // Ricevi informazioni dal server
         val username = Amplify.Auth.currentUser.username
-        Log.e(TAG, "User: ${username}")
+        Log.i(TAG, "User: ${username}")
 
         // Invia JSON del device al server
-        val user : User = User(Amplify.Auth.currentUser.username, "")
-        val device : Device = Device(user, windowManager, this)
-        val json = device.toJSONObject()
+        val tempUser : User = User(Amplify.Auth.currentUser.username, "")
+        val tempDevice : Device = Device(tempUser, windowManager, this)
+        val json = tempDevice.toJSONObject()
         json.put("requestID", "login")
         Log.i(TAG, json.toString())
         try {
             val result : String = Backend.sendJson(json)
             Log.i(TAG, "Result JSON: ${result}")
+            //val result = "[\"{'screenInches': 5.288655365180974, 'screenWidthPx': 1440, 'screenHeightPx': 2560, 'screenWidthDp': 1440, 'screenHeightDp': 598, 'screenWidthInch': 2.598428964614868, 'density': 554, 'deviceName': 'LGE-LG-H850-ab953d3e91a788da', 'user': 'giulio', 'height': 18.524554703384638, 'width': 6.751833084149496, 'requestID': 'login', 'screenHeightInch': 1.5}\", \"{'screenInches': 6.076911540920186, 'screenWidthPx': 1440, 'screenHeightPx': 3120, 'screenWidthDp': 1440, 'screenHeightDp': 816, 'screenWidthInch': 2.559058427810669, 'density': 562, 'deviceName': 'LGE-LM-G710-a976a6fd3b6bf863', 'user': 'giulio', 'height': 25.492013636176125, 'width': 6.548780036948813, 'requestID': 'login', 'screenHeightInch': 1.5}\", \"{'screenInches': 6.665616156379986, 'screenWidthPx': 1080, 'screenHeightPx': 2340, 'screenWidthDp': 1080, 'screenHeightDp': 802, 'screenWidthInch': 2.7952771186828613, 'density': 386, 'deviceName': 'Xiaomi-Mi 10-61d727e64909aa2e', 'user': 'giulio', 'requestID': 'login', 'screenHeightInch': 1.5}\", \"{'screenInches': 6.376625060356133, 'screenWidthPx': 1080, 'screenHeightPx': 2340, 'screenWidthDp': 1080, 'screenHeightDp': 843, 'screenWidthInch': 2.6771702766418457, 'density': 403, 'deviceName': 'asus-ASUS_I01WD-c85433a8e7d58c40', 'user': 'giulio', 'height': 29.984161498251524, 'width': 7.167240690134577, 'requestID': 'login', 'screenHeightInch': 1.5}\"]"
+            // Crea utente (e dispositivi) dalla response del server
+            var devicesList = ArrayList<Device>()
+            var jsonArray = JSONArray(result)
+            for (i in 0 until jsonArray.length()) {
+                var j = JSONObject(jsonArray[i].toString())
+                var d = Device(j)
+                devicesList.add(d)
+            }
+            val user = User(Amplify.Auth.currentUser.username, "")
+            user.devices = devicesList
+
+            val prefsEditor = prefs.edit()
+            val gson = Gson()
+            val json = gson.toJson(user)
+
+            // Update preferences
+            prefsEditor.putString("user", json)
+            prefsEditor.putBoolean("isAuthenticated", true)
+            prefsEditor.putString("username", user.username)
+            prefsEditor.commit()
+
+            // Launch setup activity
+            val intent = Intent(this, SetupActivity::class.java)
+            startActivity(intent)
+
+
         } catch (e : Exception) {
             Log.e(TAG, "Exception occurred: ${e.message}")
         }
-
-        // TODO: Ricevi JSON dal server per creare User
 
 
 

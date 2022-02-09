@@ -14,6 +14,17 @@ import com.smeds.inframe.R
 import com.smeds.inframe.databinding.FragmentHomeBinding
 import com.smeds.inframe.home.CapturePhotoActivity
 import com.smeds.inframe.setup.QRDisplayerActivity
+import android.app.AlarmManager
+
+import android.app.PendingIntent
+import android.content.Context
+import android.content.DialogInterface
+import androidx.appcompat.app.AlertDialog
+import com.smeds.inframe.MainActivity
+import com.smeds.inframe.home.FrameHomeActivity
+import com.smeds.inframe.home.LeaderHomeActivity
+import kotlin.system.exitProcess
+
 
 class HomeFragment : Fragment() {
 
@@ -35,12 +46,9 @@ class HomeFragment : Fragment() {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-        val textView: TextView = binding.textHome
-        homeViewModel.text.observe(viewLifecycleOwner, Observer {
-            textView.text = it
-        })
+        val imageView = binding.frameHomeImageView2
 
-        textView.setOnTouchListener {  _, motionEvent ->
+        imageView.setOnTouchListener {  _, motionEvent ->
             when (motionEvent.action) {
                 MotionEvent.ACTION_UP -> {
                     val intent = Intent(activity?.applicationContext, CapturePhotoActivity()::class.java)
@@ -49,11 +57,46 @@ class HomeFragment : Fragment() {
 
             }
             true }
+
         return root
+
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    fun clickOnSettings(view : View) {
+        val builder = AlertDialog.Builder(context!!)
+        builder.setMessage("Reset all settings?")
+            .setPositiveButton(
+                R.string.ok,
+                DialogInterface.OnClickListener { dialog, id ->
+                    restartApp()
+                })
+            .setNegativeButton(
+                R.string.cancel,
+                DialogInterface.OnClickListener { dialog, id ->
+                    // User cancelled the dialog so I do nothing lmao
+                })
+        // Create the AlertDialog object and return it
+        builder.create()
+        // Show it!
+        builder.show()
+    }
+
+    private fun restartApp() {
+        val intent = Intent(context, MainActivity::class.java)
+        val mPendingIntentId: Int = 1
+        val mPendingIntent = PendingIntent.getActivity(
+            context,
+            mPendingIntentId,
+            intent,
+            PendingIntent.FLAG_CANCEL_CURRENT
+        )
+        val mgr = context?.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+        mgr[AlarmManager.RTC, System.currentTimeMillis() + 100] = mPendingIntent
+        exitProcess(0)
     }
 }

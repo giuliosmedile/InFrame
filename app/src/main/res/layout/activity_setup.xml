@@ -76,10 +76,10 @@
 
     <TextView
         android:id="@+id/descriptionTextView"
-        android:layout_width="350dp"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="176dp"
-        android:layout_marginEnd="177dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
         android:layout_marginBottom="153dp"
         android:textAlignment="center"
         app:autoSizeMaxTextSize="200dp"

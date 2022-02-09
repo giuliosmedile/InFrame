@@ -58,8 +58,8 @@ class OnboarderPresentationActivity : OnboarderActivity() {
         )
 
         setFinishButtonTitle(R.string.beginSetup)
-        setActiveIndicatorColor(R.color.colorSecondaryDark)
-        setInactiveIndicatorColor(R.color.purple_500)
+        setActiveIndicatorColor(R.color.white)
+        setInactiveIndicatorColor(R.color.grey)
         setOnboardPagesReady(onboarderPages)
     }
 
@@ -68,7 +68,7 @@ class OnboarderPresentationActivity : OnboarderActivity() {
     }
 
     override fun onFinishButtonPressed() {
-        val intent : Intent = Intent(this, SetupActivity::class.java)
+        val intent : Intent = Intent(this, LoginActivity::class.java)
         startActivity(intent)
     }
 }

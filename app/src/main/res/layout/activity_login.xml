@@ -20,10 +20,8 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
         android:layout_marginEnd="24dp"
-        android:layout_marginBottom="228dp"
         android:onClick="signIn"
         android:text="Sign In"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/filledTextFieldPassword" />
 
@@ -33,22 +31,21 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
         android:layout_marginTop="24dp"
-        android:layout_marginBottom="228dp"
         android:onClick="signUp"
         android:text="Sign Up"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/filledTextFieldPassword"
-        app:layout_constraintVertical_bias="1.0" />
+        app:layout_constraintTop_toBottomOf="@+id/filledTextFieldPassword" />
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/filledTextFieldEmail"
 
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
 
-        android:layout_width="360dp"
-        android:layout_height="55dp"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
         android:layout_marginTop="200dp"
+        android:layout_marginEnd="16dp"
         android:layout_marginBottom="8dp"
         android:hint="Email"
         app:layout_constraintBottom_toTopOf="@+id/filledTextFieldUsername"
@@ -63,7 +60,7 @@
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/email_edTxt"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:inputType="textEmailAddress"
             app:endIconMode="clear_text" />
     </com.google.android.material.textfield.TextInputLayout>
@@ -73,9 +70,11 @@
 
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
 
-        android:layout_width="360dp"
-        android:layout_height="55dp"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
         android:layout_marginTop="200dp"
+        android:layout_marginEnd="16dp"
         android:layout_marginBottom="8dp"
         android:hint="Username"
         app:layout_constraintBottom_toTopOf="@+id/filledTextFieldPassword"
@@ -100,9 +99,11 @@
 
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
 
-        android:layout_width="359dp"
-        android:layout_height="57dp"
-        android:layout_marginBottom="300dp"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="200dp"
         android:hint="Password"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -133,13 +134,15 @@
 
     <ImageView
         android:id="@+id/imageView2"
-        android:layout_width="171dp"
-        android:layout_height="175dp"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="100dp"
+        android:layout_marginEnd="100dp"
         app:layout_constraintBottom_toTopOf="@+id/filledTextFieldEmail"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:srcCompat="@tools:sample/avatars" />
+        app:srcCompat="@drawable/icon" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
