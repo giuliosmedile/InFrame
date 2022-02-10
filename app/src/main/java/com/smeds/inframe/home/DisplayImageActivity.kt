@@ -35,6 +35,7 @@ class DisplayImageActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_display_image)
+        Log.i(Backend.TAG, "sono in displayImage")
 
         val extras = intent.extras
         if (extras?.getString("result") == null) {

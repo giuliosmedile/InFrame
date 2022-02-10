@@ -98,13 +98,20 @@ object Backend {
 
     fun downloadFile(filename : String): File {
         // Download a file from the online storage
-        var file = File.createTempFile(filename,".png")
+        Log.i(TAG,"Scaricando immagine $filename")
+        var file = File.createTempFile(filename, getFileExtension(filename))
 
         Amplify.Storage.downloadFile(filename, file,
-            {Log.i(TAG, "Succesfully uploaded")},
-            {Log.e(TAG, "Upload failed")})
+            {Log.i(TAG, "Succesfully downloaded $filename")},
+            {Log.e(TAG, "Download failed $filename")})
 
         return file
+    }
+
+    fun getFileExtension(filename : String) : String{
+        var temp = filename.takeLast(5)
+        if (temp == ".jpeg") return temp
+        else return temp.takeLast(4)
     }
 }
 
@@ -143,6 +150,8 @@ class SimpleThread(private val httpsURLConnection: HttpURLConnection, private va
             Log.e(Backend.TAG, "Exception: ${e}")
         }
     }
+
+
 }
 
 class ReturnValue {
