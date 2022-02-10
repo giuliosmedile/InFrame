@@ -18,6 +18,7 @@
         <entry key="app/src/main/res/drawable/side_nav_bar.xml" value="0.41333333333333333" />
         <entry key="app/src/main/res/layout/activity_capture_photo.xml" value="0.375" />
         <entry key="app/src/main/res/layout/activity_debug.xml" value="0.36820652173913043" />
+        <entry key="app/src/main/res/layout/activity_display_image.xml" value="0.35280797101449274" />
         <entry key="app/src/main/res/layout/activity_frame_home.xml" value="0.40353260869565216" />
         <entry key="app/src/main/res/layout/activity_leader_home.xml" value="0.23020833333333332" />
         <entry key="app/src/main/res/layout/activity_login.xml" value="0.25" />

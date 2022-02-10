@@ -1,18 +1,17 @@
 package com.smeds.inframe.setup
 
 import android.content.Intent
-import android.content.res.Configuration
+import android.content.SharedPreferences
 import android.graphics.*
 import android.os.Build
 import android.os.Bundle
+import android.preference.PreferenceManager
 import android.provider.Settings
 import android.util.Log
 import android.widget.ImageView
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.graphics.withMatrix
-import androidx.core.view.marginBottom
-import androidx.core.view.marginTop
 import androidx.lifecycle.lifecycleScope
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.WriterException
@@ -22,9 +21,8 @@ import com.smeds.inframe.data.DeviceInfo
 import com.smeds.inframe.data.MatrixTransform
 import kotlinx.android.synthetic.main.activity_qr.*
 import com.google.zxing.EncodeHintType
-import com.smeds.inframe.home.FrameHomeActivity
+import com.smeds.inframe.home.DisplayImageActivity
 import kotlinx.coroutines.Dispatchers.IO
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -35,6 +33,7 @@ import java.util.*
 class QRDisplayerActivity : AppCompatActivity() {
 
     lateinit var deviceName : String
+    lateinit var prefs : SharedPreferences
     var job : Job? = null
 
     @RequiresApi(Build.VERSION_CODES.N)
@@ -44,12 +43,15 @@ class QRDisplayerActivity : AppCompatActivity() {
 
         setQR()
 
-
         job = lifecycleScope.launch (IO) {
-            var json = makeCall()
-
+            var result = makeCall()
+            Log.e(Backend.TAG, "RECEIVED JSON OMG $result")
+            val intent = Intent(applicationContext, DisplayImageActivity::class.java)
+            intent.putExtra("result", result)
+            startActivity(intent)
         }
 
+        prefs = PreferenceManager.getDefaultSharedPreferences(this)
 
     }
 
@@ -127,9 +129,10 @@ class QRDisplayerActivity : AppCompatActivity() {
 
 
     @RequiresApi(Build.VERSION_CODES.N)
-    suspend fun makeCall() : JSONObject? {
+    suspend fun makeCall() : String {
 
         val jsonRequest = JSONObject()
+            .put("user", prefs.getString("username", ""))
             .put("deviceName", deviceName)
             .put("requestID", "output")
 
@@ -138,7 +141,6 @@ class QRDisplayerActivity : AppCompatActivity() {
             val response = Backend.sendJson(jsonRequest)
             Log.i("TEST", response)
             if (response == "none") continue
-            else return JSONObject(response)
         }
     }
 

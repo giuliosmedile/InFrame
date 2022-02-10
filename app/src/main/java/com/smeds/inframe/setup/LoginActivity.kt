@@ -195,6 +195,7 @@ class LoginActivity : AppCompatActivity() {
 
             // Update preferences
             prefsEditor.putString("user", json)
+            prefsEditor.putString("deviceName", tempDevice.name)
             prefsEditor.putBoolean("isAuthenticated", true)
             prefsEditor.putString("username", user.username)
             prefsEditor.commit()

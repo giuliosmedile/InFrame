@@ -60,4 +60,7 @@
     <string name="del_next">%next%</string>
     <string name="clearPhoto">Clear</string>
     <string name="clearPhotoMsg">Are you sure you want to start over?</string>
+    <string name="title_activity_display_image">DisplayImage</string>
+    <string name="dummy_button">Dummy Button</string>
+    <string name="dummy_content">DUMMY\nCONTENT</string>
 </resources>

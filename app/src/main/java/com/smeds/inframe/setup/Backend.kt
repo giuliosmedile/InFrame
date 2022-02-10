@@ -96,12 +96,11 @@ object Backend {
             {error -> Log.e(TAG, "Upload failed: $filename; ${error.toString()}")})
     }
 
-    fun downloadFile(): File {
+    fun downloadFile(filename : String): File {
         // Download a file from the online storage
-        val filename = "ciambella"
         var file = File.createTempFile(filename,".png")
 
-        Amplify.Storage.downloadFile("ciambella.png", file,
+        Amplify.Storage.downloadFile(filename, file,
             {Log.i(TAG, "Succesfully uploaded")},
             {Log.e(TAG, "Upload failed")})
 

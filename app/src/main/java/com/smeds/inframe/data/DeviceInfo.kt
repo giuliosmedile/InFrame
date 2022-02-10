@@ -107,7 +107,7 @@ class DeviceInfo () {
             .put("screenInches", screenInches)
             .put("screenWidthPx", screenWidthPx)
             .put("screenHeightPx", screenHeightPx)
-            .put("screenWidthDp", screenWidthPx)
+            .put("screenWidthDp", screenWidthDp)
             .put("screenHeightDp", screenHeightDp)
             .put("screenWidthInch", screenWidthInch)
             .put("screenHeightInch", screenHeightInch)
