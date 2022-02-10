@@ -6,10 +6,7 @@ import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
-import android.graphics.Matrix
-import android.graphics.RectF
+import android.graphics.*
 import android.graphics.drawable.Drawable
 import android.media.ExifInterface
 import android.net.Uri
@@ -18,14 +15,13 @@ import android.os.Bundle
 import android.os.Environment
 import android.preference.PreferenceManager
 import android.provider.MediaStore
+import android.provider.Settings
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.ImageSpan
 import android.util.Log
-import android.view.View
-import android.view.Window
-import android.widget.Button
-import android.widget.ImageView
+import android.view.*
+import android.widget.*
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
@@ -35,6 +31,7 @@ import androidx.lifecycle.lifecycleScope
 import com.smeds.inframe.R
 import com.smeds.inframe.setup.Backend
 import com.smeds.inframe.setup.DraggableImage
+import com.smeds.inframe.setup.LoginActivity
 import kotlinx.android.synthetic.main.activity_capture_photo.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.Dispatchers.IO
@@ -55,6 +52,7 @@ class CapturePhotoActivity : AppCompatActivity() {
     lateinit var zoomImgView: ImageView
     lateinit var zoomClass: DraggableImage
     lateinit var pictureImagePath : String
+    lateinit var dialog : AlertDialog
     val SELECT_PICTURE: Int = 200
     val SELECT_BACKGROUND_PICTURE : Int = 300
 
@@ -160,7 +158,9 @@ class CapturePhotoActivity : AppCompatActivity() {
             .put("user", PreferenceManager.getDefaultSharedPreferences(this).getString("username", ""))
 
         //Log.i("TEST", "JSON: ${json.toString(1)}")
-        runBlocking {
+
+
+        GlobalScope.launch {
             val tasks = listOf(
                 // Invia le due immagini al server
                 launch { Backend.uploadFile(fileForeground, fileForeground.name) },
@@ -173,6 +173,7 @@ class CapturePhotoActivity : AppCompatActivity() {
         // Invia json al server
         Backend.sendJson(json)
         Log.i(TAG, "Dopo aver inviato al server: ${json.toString(1)}")
+        hintsTextView.text = "Sent data to server succesfully"
     }
 
     fun clear(view : View) {
@@ -316,6 +317,53 @@ class CapturePhotoActivity : AppCompatActivity() {
         span.setSpan(image, icon_index, icon_index + 1, Spannable.SPAN_INCLUSIVE_EXCLUSIVE)
 
         hintsTextView.text = span
+    }
+
+    /* Function to correctly set a Process Dialog, while the app is communicating with the server
+       It just creates and displays the dialog, nothing more, nothing less
+       Stolen from StackOverflow
+     */
+    private fun setProgressDialog() {
+        val llPadding = 30
+        val ll = LinearLayout(this)
+        ll.orientation = LinearLayout.HORIZONTAL
+        ll.setPadding(llPadding, llPadding, llPadding, llPadding)
+        ll.gravity = Gravity.CENTER
+        var llParam = LinearLayout.LayoutParams(
+            LinearLayout.LayoutParams.WRAP_CONTENT,
+            LinearLayout.LayoutParams.WRAP_CONTENT
+        )
+        llParam.gravity = Gravity.CENTER
+        ll.layoutParams = llParam
+        val progressBar = ProgressBar(this)
+        progressBar.isIndeterminate = true
+        progressBar.setPadding(0, 0, llPadding, 0)
+        progressBar.layoutParams = llParam
+        llParam = LinearLayout.LayoutParams(
+            ViewGroup.LayoutParams.WRAP_CONTENT,
+            ViewGroup.LayoutParams.WRAP_CONTENT
+        )
+        llParam.gravity = Gravity.CENTER
+        val tvText = TextView(this)
+        tvText.text = getString(R.string.loading)
+        tvText.setTextColor(Color.parseColor("#000000"))
+        tvText.textSize = 20f
+        tvText.layoutParams = llParam
+        ll.addView(progressBar)
+        ll.addView(tvText)
+        val builder: AlertDialog.Builder = AlertDialog.Builder(this)
+        builder.setCancelable(true)
+        builder.setView(ll)
+        dialog = builder.create()
+        dialog.show()
+        val window: Window? = dialog?.window
+        if (window != null) {
+            val layoutParams = WindowManager.LayoutParams()
+            layoutParams.copyFrom(dialog.window?.attributes)
+            layoutParams.width = LinearLayout.LayoutParams.WRAP_CONTENT
+            layoutParams.height = LinearLayout.LayoutParams.WRAP_CONTENT
+            dialog.window?.attributes = layoutParams
+        }
     }
 
 }

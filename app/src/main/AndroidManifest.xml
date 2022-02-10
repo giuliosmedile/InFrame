@@ -23,39 +23,49 @@
         android:usesCleartextTraffic="true">
         <activity
             android:name=".home.DisplayImageActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".DebugActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".setup.LoginActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".home.LeaderHomeActivity"
             android:exported="false"
             android:label="@string/title_activity_leader_home"
-            android:theme="@style/Theme.InFrame.NoActionBar" />
+            android:theme="@style/Theme.InFrame.NoActionBar"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".setup.OnboarderPresentationActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".setup.SetupActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".setup.QRDisplayerActivity"
             android:exported="false"
-            android:theme="@style/Theme.InFrame.NoActionBar" />
+            android:theme="@style/Theme.InFrame.NoActionBar"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".home.FrameHomeActivity"
             android:exported="false"
-            android:label="Home" />
+            android:label="Home"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".home.CapturePhotoActivity"
             android:exported="false"
-            android:label="Capture" />
+            android:label="Capture"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".MainActivity"
-            android:exported="true">
+            android:exported="true"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

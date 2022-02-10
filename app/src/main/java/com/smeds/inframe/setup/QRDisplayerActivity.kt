@@ -178,6 +178,7 @@ class QRDisplayerActivity : AppCompatActivity() {
         try {
             Log.i(Backend.TAG, "Dentro finalimage")
             qrImageView.visibility = View.INVISIBLE
+            qrTextView.text = "Waiting for image from server..."
 
             // Chiama decode
             json = decodeJSON(jsonString)!!
@@ -219,7 +220,7 @@ class QRDisplayerActivity : AppCompatActivity() {
 
     private fun handleResultImage(file : File) {
         val bitmap = BitmapFactory.decodeFile(file.path)
-
+        qrTextView.visibility = View.INVISIBLE
         // Get information from json
         sizeOfImageInInchesX = json?.getDouble("sizeOfImageInInchesX")!!.toFloat()///5*2
         sizeOfImageInInchesY = json.getDouble("sizeOfImageInInchesY").toFloat()///5*2
